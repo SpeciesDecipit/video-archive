@@ -17,6 +17,7 @@ services:
       - unix_socket:/socket/
     ports:
       - 5555:5555
+    command: run_stage
 
   nginx:
     build:
