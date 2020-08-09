@@ -16,6 +16,8 @@ services:
       - video_archive_media_production:/var/www/django/media
       - unix_socket:/socket/
     command: run_stage
+    ports:
+      - 5555:5555
 
   nginx:
     build:
