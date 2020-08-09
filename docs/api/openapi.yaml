@@ -3,7 +3,7 @@
 
 openapi: 3.0.0
 servers:
-  - url: https://https://video-archive.the-o.co/api/v1/
+  - url: https://video-archive.the-o.co/api/v1/
     description: Main endpoint
 info:
   description: REST API for Video Archive
