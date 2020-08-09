@@ -28,6 +28,7 @@ services:
       - unix_socket:/socket/
       - video_archive_static_production:/var/www/django/static
       - video_archive_media_production:/var/www/django/media
+      - video_archive_letsencrypt:/etc/letsencrypt/
     depends_on:
       - python
     ports:
@@ -38,4 +39,5 @@ services:
 volumes:
   video_archive_static_production:
   video_archive_media_production:
+  video_archive_letsencrypt:
   unix_socket:
