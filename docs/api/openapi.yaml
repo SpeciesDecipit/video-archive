@@ -1,0 +1,121 @@
+---
+
+
+openapi: 3.0.0
+servers:
+  - url: https://TDB/api/v1/
+    description: Main endpoint
+info:
+  description: REST API for Video Archive
+  version: "0.0.1"
+  title: Video Archive
+  contact:
+    email: theunsignedfairon@gmail.com
+tags:
+  - name: Video Archive
+    description: |
+      This section allows user to upload/download videos
+paths:
+  /main/videos/:
+    get:
+      tags:
+        - Video Archive
+      summary: Retrieve all videos
+      description: Endpoint retrieves all videos
+      responses:
+        200:
+          description: List of videos was successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoResourceItem'
+    post:
+      tags:
+        - Video Archive
+      summary: Upload a new video
+      description: Endpoint uploads a new video
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VideoResourceItem'
+      responses:
+        201:
+          description: |
+            The new video was successfully uploaded
+            (or uploading in case of 3rd resource)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoResourceItem'
+
+components:
+  schemas:
+    StatusEnum:
+      type: string
+      description: Enum with video recoding status
+      default: uploading
+      enum:
+        - uploading
+        - preview_creation
+        - recoding
+        - ready
+      readOnly: true
+    VideoItem:
+      type: object
+      required:
+        - extension
+        - primary
+        - video
+      properties:
+        extension:
+          type: string
+          description: Extension of video (format)
+          readOnly: true
+        primary:
+          type: boolean
+          description: Original or recoded
+          readOnly: true
+        video:
+          type: string
+          format: binary
+          readOnly: true
+    VideoResourceItem:
+      type: object
+      required:
+        - id
+        - title
+        - preview
+        - status
+      properties:
+        id:
+          type: integer
+          description: Video ID
+          readOnly: true
+        title:
+          type: string
+          description: Video title
+        preview:
+          type: string
+          description: Thumbnails for video
+          format: binary
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideoItem'
+          readOnly: true
+        video:
+          type: string
+          format: binary
+          writeOnly: true
+        url:
+          type: string
+          description: |
+            The field should be provided in case
+            when video should be downloaded from 3rd resource
+          writeOnly: true

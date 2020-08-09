@@ -1,0 +1,40 @@
+---
+
+
+version: "3.8"
+
+services:
+  python:
+    build:
+      target: development_build
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        DJANGO_ENV: production
+    volumes:
+      - video_archive_static_production:/var/www/django/static
+      - video_archive_media_production:/var/www/django/media
+      - unix_socket:/socket/
+    ports:
+      - 5555:5555
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    container_name: video_archive_nginx
+    volumes:
+      - unix_socket:/socket/
+      - video_archive_static_production:/var/www/django/static
+      - video_archive_media_production:/var/www/django/media
+    depends_on:
+      - python
+    ports:
+      - 80:80
+      - 443:443
+
+
+volumes:
+  video_archive_static_production:
+  video_archive_media_production:
+  unix_socket:

@@ -1,0 +1,53 @@
+---
+
+
+
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    container_name: video_archive_postgres
+    volumes:
+      - video_archive_pgdata:/var/lib/postgresql/data
+    env_file: ./config/.env
+    ports:
+      - 5432:5432
+
+  python:
+    build:
+      target: development_build
+      context: .
+      dockerfile: ./docker/django/Dockerfile
+      args:
+        DJANGO_ENV: development
+    container_name: video_archive_python
+    ports:
+      - 8000:8000
+      - 5555:5555
+    volumes:
+      - .:/code
+    depends_on:
+      - postgres
+    env_file: ./config/.env
+    command: run_dev
+
+  rabbitmq:
+    image: rabbitmq:3.8.6-management
+    container_name: video_archive_rabbitmq
+    env_file: ./config/.env
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  redoc:
+    image: redocly/redoc
+    container_name: video_archive_redoc
+    volumes:
+      - ./docs/api/openapi.yaml:/usr/share/nginx/html/swagger.yaml
+    ports:
+      - 8080:80
+    env_file: ./config/.env
+
+volumes:
+  video_archive_pgdata:
