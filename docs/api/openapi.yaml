@@ -80,7 +80,7 @@ components:
           readOnly: true
         video:
           type: string
-          format: binary
+          description: URL to download video
           readOnly: true
     VideoResourceItem:
       type: object
