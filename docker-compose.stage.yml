@@ -15,8 +15,6 @@ services:
       - video_archive_static_production:/var/www/django/static
       - video_archive_media_production:/var/www/django/media
       - unix_socket:/socket/
-    ports:
-      - 5555:5555
     command: run_stage
 
   nginx:
