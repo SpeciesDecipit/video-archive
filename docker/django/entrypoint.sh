@@ -30,9 +30,8 @@ if [ "$cmd" = 'run_dev' ]; then
 elif [ "$cmd" = 'run_stage' ]; then
   celery -A server.settings worker -E --loglevel DEBUG -P prefork & \
   flower -A server.settings & \
-  sh ./docker/django/uvicorn.sh & \
+  sh ./docker/django/uvicorn.sh;
 else
   exec $cmd
 fi
 
-exec $cmd
