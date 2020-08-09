@@ -29,7 +29,7 @@ if [ "$cmd" = 'run_dev' ]; then
   python manage.py runserver 0.0.0.0:8000;
 elif [ "$cmd" = 'run_stage' ]; then
   celery -A server.settings worker -E --loglevel DEBUG -P prefork & \
-  flower -A server.settings & \
+  flower -A server.settings --url_prefix=flower & \
   sh ./docker/django/uvicorn.sh;
 else
   exec $cmd
